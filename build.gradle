@@ -1,0 +1,112 @@
+/*
+ * Skyblock Plus - A Skyblock focused Discord bot with many commands and customizable features to improve the experience of Skyblock players and guild staff!
+ * Copyright (c) 2021-2023 kr45732
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+plugins {
+    id 'application'
+
+    // Shadow jar
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+
+    // Spring boot
+    id 'org.springframework.boot' version '3.1.0'
+    id "io.spring.dependency-management" version "1.1.0"
+
+    // Lombok annotations
+    id "io.freefair.lombok" version "8.4"
+}
+
+version = '0.0.1'
+mainClassName = 'com.skyblockplus.Main'
+
+tasks.register('stage') {
+    dependsOn['shadowJar']
+    dependsOn build
+    doLast {
+        file("build/libs/SkyblockPlus-0.0.1-all.jar").delete()
+        delete fileTree(dir: "build/distributions/")
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://m2.dv8tion.net/releases' }
+    maven { url 'https://jitpack.io' }
+    maven {
+        url 'https://m2.chew.pro/releases'
+        content {
+            includeGroup("pw.chew")
+        }
+    }
+    maven {
+        url 'https://m2.chew.pro/snapshots'
+        content {
+            includeGroup("pw.chew")
+        }
+    }
+}
+
+dependencies {
+    // JDA (Discord API wrapper)
+    implementation ('net.dv8tion:JDA:5.0.0-beta.18') {
+        exclude module: 'opus-java'
+    }
+
+    // Discord webhooks
+    implementation 'club.minnced:discord-webhooks:0.8.4'
+
+    // JDA utilities
+    implementation 'pw.chew:jda-chewtils:2.0-SNAPSHOT'
+    // implementation 'com.github.chew.jda-chewtils:jda-chewtils:e9fbfeadc3'
+
+    // Google libraries
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // NBT parser
+    implementation 'me.nullicorn:Nedit:2.2.0'
+
+    // Spring boot and postgresql
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.1.0'
+    runtimeOnly 'org.postgresql:postgresql:42.7.1'
+
+    // MySQL
+    implementation 'mysql:mysql-connector-java:8.0.33'
+
+    // Http Client
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+
+    // Emoji parser
+    implementation 'com.vdurmont:emoji-java:5.1.1'
+
+    // Groovy
+    implementation "org.codehaus.groovy:groovy:3.0.19"
+
+    // Logging
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+    implementation 'ch.qos.logback:logback-core:1.4.14'
+
+    // Git
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r'
+
+    // Caching
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
+    // Fuzzy Searching
+    implementation 'me.xdrop:fuzzywuzzy:1.4.0'
+}
